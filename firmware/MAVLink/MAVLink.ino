@@ -14,6 +14,9 @@ int customMode = 0;
 void setup() {
   localSerial->begin(115200);
   remoteSerial->begin(115200);
+  
+  //pinMode(9, INPUT);
+  //pinMode(10, INPUT);
 }
 
 void loop() {
