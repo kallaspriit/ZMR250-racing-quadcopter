@@ -6,50 +6,85 @@ HardwareSerial2 *remoteSerial = &Serial2;
 boolean isFirstHeartbeat = true;
 boolean isFeedsStarted = false;
 
-int received_sysid = 0;
-int received_compid = 0;
+int remoteSystemId = 0;
+int remoteComponentId = 0;
 int baseMode = 0;
 int customMode = 0;
+
+unsigned long lastHeartbeatTime = 0;
+unsigned long lastDataReceiveTime = 0;
+unsigned long lastStartFeedsTime = 0;
 
 void setup() {
   localSerial->begin(115200);
   remoteSerial->begin(115200);
   
   //pinMode(9, INPUT);
-  //pinMode(10, INPUT);
+  pinMode(10, INPUT);
 }
 
 void loop() {
+  unsigned long currentTime = millis();
+  
   receiveMessage();
+  
+  if (
+    (currentTime - lastDataReceiveTime > 3000 || lastDataReceiveTime == 0)
+    && currentTime - lastHeartbeatTime < 1000
+    && currentTime - lastStartFeedsTime > 5000
+  ) {
+    startFeeds(); 
+  }
 }
 
 void startFeeds() {
-  localSerial->println("Starting feeds");
+  remoteSerial->begin(115200);
+  
+  localSerial->print("!!!!!! Starting feeds for system id: ");
+  localSerial->print(remoteSystemId);
+  localSerial->print(", component id: ");
+  localSerial->println(remoteComponentId);
   
   mavlink_message_t msg;
-  /*mavlink_msg_request_data_stream_pack(127, 0, &msg, received_sysid, received_compid, MAV_DATA_STREAM_RAW_SENSORS, MAV_DATA_STREAM_RAW_SENSORS_RATE, MAV_DATA_STREAM_RAW_SENSORS_ACTIVE);
-  send_message(&msg);
-  delay(10);*/
-  /*mavlink_msg_request_data_stream_pack(127, 0, &msg, received_sysid, received_compid, MAV_DATA_STREAM_EXTRA1, MAV_DATA_STREAM_EXTRA1_RATE, MAV_DATA_STREAM_EXTRA1_ACTIVE);
-  send_message(&msg);
-  delay(10);*/
-  /*mavlink_msg_request_data_stream_pack(127, 0, &msg, received_sysid, received_compid, MAV_DATA_STREAM_EXTRA2, MAV_DATA_STREAM_EXTRA2_RATE, MAV_DATA_STREAM_EXTRA2_ACTIVE);
-  send_message(&msg);
-  delay(10);*/
-  /*mavlink_msg_request_data_stream_pack(127, 0, &msg, received_sysid, received_compid, MAV_DATA_STREAM_EXTENDED_STATUS, MAV_DATA_STREAM_EXTENDED_STATUS_RATE, MAV_DATA_STREAM_EXTENDED_STATUS_ACTIVE);
-  send_message(&msg);
-  delay(10);*/
-  /*mavlink_msg_request_data_stream_pack(127, 0, &msg, received_sysid, received_compid, MAV_DATA_STREAM_RAW_CONTROLLER, MAV_DATA_STREAM_RAW_CONTROLLER_RATE, MAV_DATA_STREAM_RAW_CONTROLLER_ACTIVE);
-  send_message(&msg);
-  delay(10);*/
-  /*mavlink_msg_request_data_stream_pack(127, 0, &msg, received_sysid, received_compid, MAV_DATA_STREAM_POSITION, MAV_DATA_STREAM_POSITION_RATE, MAV_DATA_STREAM_POSITION_ACTIVE);
-  send_message(&msg);
-  delay(10);*/
-  mavlink_msg_request_data_stream_pack(127, 0, &msg, received_sysid, received_compid, MAV_DATA_STREAM_ALL, 0, 0);
   
+  // first disable all
+  mavlink_msg_request_data_stream_pack(127, 0, &msg, remoteSystemId, remoteComponentId, MAV_DATA_STREAM_ALL, 0, 0);
   sendMessage(&msg);
+  delay(10);
+  
+  /*mavlink_msg_request_data_stream_pack(127, 0, &msg, remoteSystemId, remoteComponentId, MAV_DATA_STREAM_RAW_SENSORS, MAV_DATA_STREAM_RAW_SENSORS_RATE, MAV_DATA_STREAM_RAW_SENSORS_ACTIVE);
+  send_message(&msg);
+  delay(10);*/
+  
+  /*mavlink_msg_request_data_stream_pack(127, 0, &msg, remoteSystemId, remoteComponentId, MAV_DATA_STREAM_EXTRA1, MAV_DATA_STREAM_EXTRA1_RATE, MAV_DATA_STREAM_EXTRA1_ACTIVE);
+  send_message(&msg);
+  delay(10);*/
+  
+  /*mavlink_msg_request_data_stream_pack(127, 0, &msg, remoteSystemId, remoteComponentId, MAV_DATA_STREAM_EXTRA2, MAV_DATA_STREAM_EXTRA2_RATE, MAV_DATA_STREAM_EXTRA2_ACTIVE);
+  send_message(&msg);
+  delay(10);*/
+  
+  /*mavlink_msg_request_data_stream_pack(127, 0, &msg, remoteSystemId, remoteComponentId, MAV_DATA_STREAM_EXTENDED_STATUS, MAV_DATA_STREAM_EXTENDED_STATUS_RATE, MAV_DATA_STREAM_EXTENDED_STATUS_ACTIVE);
+  send_message(&msg);
+  delay(10);*/
+  
+  mavlink_msg_request_data_stream_pack(127, 0, &msg, remoteSystemId, remoteComponentId, MAV_DATA_STREAM::MAV_DATA_STREAM_ALL, 1, 1);
+  sendMessage(&msg);
+  delay(10);
+  
+  /*mavlink_msg_request_data_stream_pack(127, 0, &msg, remoteSystemId, remoteComponentId, MAV_DATA_STREAM_POSITION, MAV_DATA_STREAM_POSITION_RATE, MAV_DATA_STREAM_POSITION_ACTIVE);
+  send_message(&msg);
+  delay(10);*/
+  
+  /*mavlink_msg_request_data_stream_pack(127, 0, &msg, remoteSystemId, remoteComponentId, MAV_DATA_STREAM_ALL, 1, 1);
+  sendMessage(&msg);
+  delay(10);*/
   
   isFeedsStarted = true;
+  
+  pinMode(10, INPUT);
+  
+  lastStartFeedsTime = millis();
 }
 
 void sendMessage(mavlink_message_t* msg) {
@@ -62,6 +97,7 @@ void sendMessage(mavlink_message_t* msg) {
 void receiveMessage() {
   mavlink_message_t msg;
   mavlink_status_t status;
+  boolean receivedData = true;
   
   while(remoteSerial->available() > 0)  {
     uint8_t c = remoteSerial->read();
@@ -70,6 +106,8 @@ void receiveMessage() {
       switch(msg.msgid) {
         case MAVLINK_MSG_ID_HEARTBEAT:
           handleMavlinkHeartbeat(&msg);
+          
+          receivedData = false;
         break;
         
         case MAVLINK_MSG_ID_ATTITUDE:
@@ -80,9 +118,15 @@ void receiveMessage() {
         default:
           localSerial->print("Got message with id: ");
           localSerial->println(msg.msgid);
+          
+          receivedData = false;
         break;
       }
     }
+  }
+  
+  if (receivedData) {
+    lastDataReceiveTime = millis(); 
   }
 }
 
@@ -91,8 +135,8 @@ void handleMavlinkHeartbeat(mavlink_message_t *msg) {
   mavlink_msg_heartbeat_decode(msg, &packet);
  
   if ((*msg).sysid != 0xff) { // do not process mission planner heartbeats if we have two receiver xbees
-      received_sysid = (*msg).sysid; // save the sysid and compid of the received heartbeat for use in sending new messages
-      received_compid = (*msg).compid;
+      remoteSystemId = (*msg).sysid; // save the sysid and compid of the received heartbeat for use in sending new messages
+      remoteComponentId = (*msg).compid;
       baseMode = packet.base_mode;
       customMode = packet.custom_mode;
       
@@ -100,10 +144,10 @@ void handleMavlinkHeartbeat(mavlink_message_t *msg) {
       localSerial->print(baseMode);
       localSerial->print(", custom mode: ");
       localSerial->print(customMode);
-      localSerial->print(", sysid: ");
-      localSerial->print(received_sysid);
-      localSerial->print(", compid: ");
-      localSerial->println(received_compid);
+      localSerial->print(", remote system id: ");
+      localSerial->print(remoteSystemId);
+      localSerial->print(", remote component id: ");
+      localSerial->println(remoteComponentId);
     }
 
   if (isFirstHeartbeat) {
@@ -112,7 +156,9 @@ void handleMavlinkHeartbeat(mavlink_message_t *msg) {
     }*/
     
     isFirstHeartbeat = false;
-  } 
+  }
+  
+  lastHeartbeatTime = millis();
 }
 
 void handleMavlinkAttitude(mavlink_message_t *msg) {
