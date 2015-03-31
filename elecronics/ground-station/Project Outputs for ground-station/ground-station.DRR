@@ -1,0 +1,19 @@
+---------------------------------------------------------------------------
+NCDrill File Report For: ground-station.PcbDoc   31.03.2015  16:01:33
+---------------------------------------------------------------------------
+
+Layer Pair : Top Layer to Bottom Layer
+ASCII RoundHoles File : ground-station.TXT
+
+Tool         Hole Size           Hole Type     Hole Count Plated       Tool Travel
+---------------------------------------------------------------------------
+T1        12mil (0.3048mm)         Round          21               4.21 Inch (106.91 mm)
+T2        30mil (0.762mm)          Round          6                0.45 Inch (11.43 mm)
+T3        31mil (0.7874mm)         Round          2                0.08 Inch (2.00 mm)
+T4        39mil (0.9906mm)         Round          4                0.30 Inch (7.62 mm)
+T5        40mil (1.016mm)          Round          29               4.11 Inch (104.39 mm)
+T6        43mil (1.0922mm)         Round          11               1.00 Inch (25.40 mm)
+---------------------------------------------------------------------------
+Totals                                            73               10.15 Inch (257.75 mm)
+
+Total Processing Time (hh:mm:ss) : 00:00:00
