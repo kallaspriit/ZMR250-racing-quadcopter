@@ -1,4 +1,7 @@
+#include "Display.h"
+
 #include <mavlink.h>
+#include <SPI.h>
 
 usb_serial_class *localSerial = &Serial;
 HardwareSerial2 *remoteSerial = &Serial2;
@@ -15,12 +18,23 @@ unsigned long lastHeartbeatTime = 0;
 unsigned long lastDataReceiveTime = 0;
 unsigned long lastStartFeedsTime = 0;
 
+const int DISPLAY_DC_PIN = 2;
+const int DISPLAY_CS_PIN = 4;
+const int DISPLAY_RST_PIN = 3;
+const int DISPLAY_MOSI_PIN = 11;
+const int DISPLAY_SCLK_PIN = 13;
+
+Display display(DISPLAY_DC_PIN, DISPLAY_CS_PIN, DISPLAY_RST_PIN, DISPLAY_MOSI_PIN, DISPLAY_SCLK_PIN);
+
 void setup() {
   localSerial->begin(115200);
   remoteSerial->begin(115200);
   
   //pinMode(9, INPUT);
   pinMode(10, INPUT);
+  
+  display.init();
+  display.drawString(10, 10, "Loading...", 0xFFFF);
 }
 
 void loop() {
@@ -178,6 +192,28 @@ void handleMavlinkAttitude(mavlink_message_t *msg) {
   localSerial->print("deg, roll ");
   localSerial->print(roll);
   localSerial->println("deg ");
+  
+  String pitchText = "";
+  String yawText = "";
+  String rollText = "";
+  
+  pitchText += "Pitch: ";
+  pitchText += pitch;
+  pitchText += "deg";
+  
+  yawText += "Yaw: ";
+  yawText += yaw;
+  yawText += "deg";
+  
+  rollText += "Roll: ";
+  rollText += roll;
+  rollText += "deg";
+  
+  display.clear();
+  
+  display.drawString(10, 10, pitchText, 0xFFFF);
+  display.drawString(10, 20, yawText, 0xFFFF);
+  display.drawString(10, 30, rollText, 0xFFFF);
 }
 
 float radToDeg(float radians) {
