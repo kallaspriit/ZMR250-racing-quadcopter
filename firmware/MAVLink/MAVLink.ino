@@ -3,8 +3,17 @@
 #include <mavlink.h>
 #include <SPI.h>
 
-usb_serial_class *localSerial = &Serial;
-HardwareSerial2 *remoteSerial = &Serial2;
+// pins config
+const int DISPLAY_DC_PIN = 2;
+const int DISPLAY_CS_PIN = 4;
+const int DISPLAY_RST_PIN = 3;
+const int DISPLAY_MOSI_PIN = 11;
+const int DISPLAY_SCLK_PIN = 13;
+const int SERIAL2_TX_PIN = 10;
+const int BAT_SENSE_PIN = 16;
+
+// app config
+const unsigned long batteryReadingInterval = 1000;
 
 boolean isFirstHeartbeat = true;
 boolean isFeedsStarted = false;
@@ -17,21 +26,19 @@ int customMode = 0;
 unsigned long lastHeartbeatTime = 0;
 unsigned long lastDataReceiveTime = 0;
 unsigned long lastStartFeedsTime = 0;
-
-const int DISPLAY_DC_PIN = 2;
-const int DISPLAY_CS_PIN = 4;
-const int DISPLAY_RST_PIN = 3;
-const int DISPLAY_MOSI_PIN = 11;
-const int DISPLAY_SCLK_PIN = 13;
+unsigned long lastBatterySenseTime = 0;
 
 Display display(DISPLAY_DC_PIN, DISPLAY_CS_PIN, DISPLAY_RST_PIN, DISPLAY_MOSI_PIN, DISPLAY_SCLK_PIN);
+
+usb_serial_class *localSerial = &Serial;
+HardwareSerial2 *remoteSerial = &Serial2;
 
 void setup() {
   localSerial->begin(115200);
   remoteSerial->begin(115200);
   
-  //pinMode(9, INPUT);
-  pinMode(10, INPUT);
+  pinMode(SERIAL2_TX_PIN, INPUT); // make the tx pin not drive it not to affect bluetooth-radio communication
+  pinMode(BAT_SENSE_PIN, INPUT);
   
   display.init();
   display.drawString(10, 10, "Loading...", 0xFFFF);
@@ -41,6 +48,7 @@ void loop() {
   unsigned long currentTime = millis();
   
   receiveMessage();
+  readBatteryVoltage(currentTime);
   
   if (
     (currentTime - lastDataReceiveTime > 3000 || lastDataReceiveTime == 0)
@@ -214,6 +222,19 @@ void handleMavlinkAttitude(mavlink_message_t *msg) {
   display.drawString(10, 10, pitchText, 0xFFFF);
   display.drawString(10, 20, yawText, 0xFFFF);
   display.drawString(10, 30, rollText, 0xFFFF);
+}
+
+void readBatteryVoltage(unsigned long currentTime) {
+  if (currentTime - lastBatterySenseTime < batteryReadingInterval) {
+    return;  
+  }
+  
+  int rawReading = analogRead(BAT_SENSE_PIN);
+  
+  localSerial->print("Battery: ");
+  localSerial->println(rawReading);
+  
+  lastBatterySenseTime = currentTime;
 }
 
 float radToDeg(float radians) {
