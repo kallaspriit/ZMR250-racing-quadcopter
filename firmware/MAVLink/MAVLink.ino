@@ -230,9 +230,12 @@ void readBatteryVoltage(unsigned long currentTime) {
   }
   
   int rawReading = analogRead(BAT_SENSE_PIN);
+  float voltage = (float)max(min(map(rawReading, 0, 970, 0, 420), 420), 0) / 100.0f;
   
-  localSerial->print("Battery: ");
-  localSerial->println(rawReading);
+  localSerial->print("Battery reading: ");
+  localSerial->print(rawReading);
+  localSerial->print(", voltage: ");
+  localSerial->println(voltage);
   
   lastBatterySenseTime = currentTime;
 }
