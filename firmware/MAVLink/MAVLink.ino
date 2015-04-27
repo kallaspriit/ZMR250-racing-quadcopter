@@ -11,6 +11,7 @@ const int DISPLAY_MOSI_PIN = 11;
 const int DISPLAY_SCLK_PIN = 13;
 const int SERIAL2_TX_PIN = 10;
 const int BAT_SENSE_PIN = 16;
+const int BT_STATUS_PIN = 17;
 
 // app config
 const unsigned long batteryReadingInterval = 1000;
@@ -28,6 +29,9 @@ unsigned long lastDataReceiveTime = 0;
 unsigned long lastStartFeedsTime = 0;
 unsigned long lastBatterySenseTime = 0;
 
+volatile unsigned long lastBluetoothStateChangeTime = 0;
+volatile int lastBluetoothState = LOW;
+
 Display display(DISPLAY_DC_PIN, DISPLAY_CS_PIN, DISPLAY_RST_PIN, DISPLAY_MOSI_PIN, DISPLAY_SCLK_PIN);
 
 usb_serial_class *localSerial = &Serial;
@@ -40,8 +44,12 @@ void setup() {
   pinMode(SERIAL2_TX_PIN, INPUT); // make the tx pin not drive it not to affect bluetooth-radio communication
   pinMode(BAT_SENSE_PIN, INPUT);
   
+  // listen for bluetooth status changes
+  pinMode(BT_STATUS_PIN, INPUT);
+  attachInterrupt(BT_STATUS_PIN, onBluetoothStatusChange, CHANGE);
+  
   display.init();
-  display.drawString(10, 10, "Loading...", 0xFFFF);
+  display.drawString(10, 10, "Waiting for heartbeat...", 0xFFFF);
 }
 
 void loop() {
@@ -59,10 +67,29 @@ void loop() {
   }
 }
 
+void onBluetoothStatusChange() {
+  int state = digitalRead(BT_STATUS_PIN);
+  
+  if (state == HIGH) {
+    localSerial->println("BT high");
+  } else {
+    localSerial->println("BT low");
+  }
+  
+  lastBluetoothStateChangeTime = millis();
+  lastBluetoothState = state;
+}
+
+bool isBluetoothConnected() {
+  unsigned long timeSinceBluetootStateChange = millis() - lastBluetoothStateChangeTime;
+  
+  return lastBluetoothState == HIGH && timeSinceBluetootStateChange > 500;
+}
+
 void startFeeds() {
   remoteSerial->begin(115200);
   
-  localSerial->print("!!!!!! Starting feeds for system id: ");
+  localSerial->print("Starting feeds for system id: ");
   localSerial->print(remoteSystemId);
   localSerial->print(", component id: ");
   localSerial->println(remoteComponentId);
@@ -176,6 +203,9 @@ void handleMavlinkHeartbeat(mavlink_message_t *msg) {
     /*if (!isFeedsStarted) {
       startFeeds();
     }*/
+    
+    display.clear();
+    display.drawString(10, 10, "Got heartbeat, requesting data", 0xFFFF);
     
     isFirstHeartbeat = false;
   }

@@ -9,6 +9,7 @@ Display::Display(int dcPin, int csPin, int rstPin, int mosiPin, int sclkPin) :
   sclkPin(sclkPin)
 {
   tft = new ST7735(csPin, dcPin, mosiPin, sclkPin, rstPin);
+  //tft = new ST7735(csPin, dcPin, rstPin);
 }
 
 void Display::init() {
