@@ -23,7 +23,7 @@ const unsigned long batteryReadingInterval = 1000;
 // runtime information
 State state = State::INITIALIZING;
 boolean isFirstHeartbeat = true;
-boolean isFeedsStarted = false;
+float localBatteryVoltage = 4.2f;
 
 // mavlink information
 int remoteSystemId = 0;
@@ -38,6 +38,7 @@ unsigned long lastMessageReceiveTime = 0;
 unsigned long lastDataReceiveTime = 0;
 unsigned long lastStartFeedsTime = 0;
 unsigned long lastBatterySenseTime = 0;
+unsigned long lastUserInterfaceUpdateTime = 0;
 
 // bluetooth state tracking
 volatile unsigned long lastBluetoothStateChangeTime = 0;
@@ -61,7 +62,7 @@ void setup() {
   setupIO();
   setupInterrupts();
   setupDisplay();
-  setupUI();
+  setupUserInterface();
   setupSensors();
   setupStateMachine();
 }
@@ -80,6 +81,7 @@ void loop() {
   stepBatteryMonitor(currentTime, dt);
   stepFeedMonitor(currentTime, dt);
   stepStateMachine(currentTime, dt);
+  stepUserInterface(currentTime, dt);
 }
 
 /**
@@ -130,10 +132,8 @@ void setupDisplay() {
 /**
  * Sets up the user interface.
  */
-void setupUI() {
+void setupUserInterface() {
   ui = new UI(display);
-  
-  ui->showLoading("Loading");
 }
 
 /**
@@ -215,12 +215,12 @@ void stepBatteryMonitor(unsigned long currentTime, unsigned long dt) {
   }
   
   int rawReading = analogRead(BAT_SENSE_PIN);
-  float voltage = (float)max(min(map(rawReading, 0, 970, 0, 420), 420), 0) / 100.0f;
+  localBatteryVoltage = (float)max(min(map(rawReading, 0, 970, 0, 420), 420), 0) / 100.0f;
   
   localSerial->print("Battery reading: ");
   localSerial->print(rawReading);
   localSerial->print(", voltage: ");
-  localSerial->println(voltage);
+  localSerial->println(localBatteryVoltage);
   
   lastBatterySenseTime = currentTime;
 }
@@ -235,7 +235,7 @@ void stepFeedMonitor(unsigned long currentTime, unsigned long dt) {
   if (
     (currentTime - lastDataReceiveTime > 3000 || lastDataReceiveTime == 0)
     && currentTime - lastHeartbeatTime < 1000
-    && currentTime - lastStartFeedsTime > 5000
+    && currentTime - lastStartFeedsTime > 10000
   ) {
     requestMavlinkFeeds(); 
   }
@@ -248,26 +248,51 @@ void stepFeedMonitor(unsigned long currentTime, unsigned long dt) {
  * @param dt Time since last step in microseconds
  */
 void stepStateMachine(unsigned long currentTime, unsigned long dt) {
+  unsigned long timeSinceDataReceived = currentTime - lastDataReceiveTime;
+  unsigned long timeSinceHeartbeatReceived = currentTime - lastHeartbeatTime;
   
+  if (lastHeartbeatTime != 0) {
+    if (timeSinceDataReceived < 5000) {
+      setState(State::MONITORING);
+    } else if (timeSinceHeartbeatReceived < 5000) {
+      setState(State::CONNECTED);
+    } else {
+      setState(State::DISCONNECTED);
+    }
+  } else {
+    setState(State::DISCONNECTED);
+  }
 }
 
+boolean x = false;
+
 /**
- * Returns state enum name as string.
+ * Updates the user interface.
  *
- * @param state State enum value
- * @return State name
+ * @param currentTime Current step time in milliseconds
+ * @param dt Time since last step in microseconds
  */
-String getStateName(State state) {
-  switch (state) {
-    case State::INITIALIZING:
-      return "INITIALIZING";
-      
-    case State::LOADING:
-      return "LOADING";
-      
-    default:
-      return "UNKNOWN";
+void stepUserInterface(unsigned long currentTime, unsigned long dt) {
+  unsigned long timeSinceLastUpdate = currentTime - lastUserInterfaceUpdateTime;
+  
+  if (timeSinceLastUpdate < 1000) {
+    return;  
   }
+  
+  if (x) {
+    ui->showLoading("FIRST");
+  } else {
+    ui->showLoading("SECOND");
+  }
+  
+  ui->renderHeader(isBluetoothConnected(), localBatteryVoltage);
+  ui->renderFooter(getCurrentStateName());
+  
+  x = !x;
+  
+  /*ui->showLoading(getCurrentStateName());*/
+  
+  lastUserInterfaceUpdateTime = currentTime;
 }
 
 /**
@@ -283,11 +308,21 @@ void setState(State newState) {
   }
   
   State oldState = state;
+  state = newState;
 
   localSerial->print("Transition from state ");
   localSerial->print(getStateName(oldState));
   localSerial->print(" to ");
   localSerial->println(getStateName(newState));
+}
+
+/**
+ * Returns currently active state name.
+ *
+ * @return Active state name
+ */
+String getCurrentStateName() {
+  return getStateName(state);
 }
 
 /**
@@ -307,11 +342,11 @@ boolean isBluetoothConnected() {
 void onBluetoothStatusChange() {
   int state = digitalRead(BT_STATUS_PIN);
   
-  if (state == HIGH) {
+  /*if (state == HIGH) {
     localSerial->println("BT high");
   } else {
     localSerial->println("BT low");
-  }
+  }*/
   
   lastBluetoothStateChangeTime = millis();
   lastBluetoothState = state;
@@ -321,59 +356,33 @@ void onBluetoothStatusChange() {
  * Attempts to start mavlink feeds.
  */
 void requestMavlinkFeeds() {
-  localSerial->print("Starting feeds for system id: ");
-  localSerial->print(remoteSystemId);
-  localSerial->print(", component id: ");
-  localSerial->println(remoteComponentId);
+  localSerial->println("Requesting mavlink feeds");
   
   mavlink_message_t msg;
   
   // first disable all
   mavlink_msg_request_data_stream_pack(127, 0, &msg, remoteSystemId, remoteComponentId, MAV_DATA_STREAM_ALL, 0, 0);
   sendMavlinkMessage(&msg);
-  delay(10);
   
-  /*mavlink_msg_request_data_stream_pack(127, 0, &msg, remoteSystemId, remoteComponentId, MAV_DATA_STREAM_RAW_SENSORS, MAV_DATA_STREAM_RAW_SENSORS_RATE, MAV_DATA_STREAM_RAW_SENSORS_ACTIVE);
-  sendMavlinkMessage(&msg);
-  delay(10);*/
-  
-  /*mavlink_msg_request_data_stream_pack(127, 0, &msg, remoteSystemId, remoteComponentId, MAV_DATA_STREAM_EXTRA1, MAV_DATA_STREAM_EXTRA1_RATE, MAV_DATA_STREAM_EXTRA1_ACTIVE);
-  sendMavlinkMessage(&msg);
-  delay(10);*/
-  
-  /*mavlink_msg_request_data_stream_pack(127, 0, &msg, remoteSystemId, remoteComponentId, MAV_DATA_STREAM_EXTRA2, MAV_DATA_STREAM_EXTRA2_RATE, MAV_DATA_STREAM_EXTRA2_ACTIVE);
-  sendMavlinkMessage(&msg);
-  delay(10);*/
-  
-  /*mavlink_msg_request_data_stream_pack(127, 0, &msg, remoteSystemId, remoteComponentId, MAV_DATA_STREAM_EXTENDED_STATUS, MAV_DATA_STREAM_EXTENDED_STATUS_RATE, MAV_DATA_STREAM_EXTENDED_STATUS_ACTIVE);
-  sendMavlinkMessage(&msg);
-  delay(10);*/
-  
+  // then request all
   mavlink_msg_request_data_stream_pack(127, 0, &msg, remoteSystemId, remoteComponentId, MAV_DATA_STREAM::MAV_DATA_STREAM_ALL, 1, 1);
   sendMavlinkMessage(&msg);
-  delay(10);
-  
-  /*mavlink_msg_request_data_stream_pack(127, 0, &msg, remoteSystemId, remoteComponentId, MAV_DATA_STREAM_POSITION, MAV_DATA_STREAM_POSITION_RATE, MAV_DATA_STREAM_POSITION_ACTIVE);
-  sendMavlinkMessage(&msg);
-  delay(10);*/
-  
-  /*mavlink_msg_request_data_stream_pack(127, 0, &msg, remoteSystemId, remoteComponentId, MAV_DATA_STREAM_ALL, 1, 1);
-  sendMavlinkMessage(&msg);
-  delay(10);*/
-  
-  isFeedsStarted = true;
-  
-  // restore the remote serial transmit pin to high-z state
-  pinMode(SERIAL2_TX_PIN, INPUT);
   
   lastStartFeedsTime = millis();
 }
 
 void sendMavlinkMessage(mavlink_message_t* msg) {
+  remoteSerial->begin(REMOTE_SERIAL_BAUDRATE);
+  
   uint8_t buf[MAVLINK_MAX_PACKET_LEN];
   uint16_t len = mavlink_msg_to_send_buffer(buf, msg);
   
   remoteSerial->write(buf, len);
+  
+  // restore the remote serial transmit pin to high-z state
+  delay(10);
+  pinMode(SERIAL2_TX_PIN, INPUT);
+  delay(10);
 }
 
 void handleMavlinkHeartbeat(mavlink_message_t *msg) {
@@ -390,24 +399,21 @@ void handleMavlinkHeartbeat(mavlink_message_t *msg) {
   baseMode = packet.base_mode;
   customMode = packet.custom_mode;
   
-  localSerial->print("MAVLINK_MSG_ID_HEARTBEAT heartbeat base mode: ");
+  /*localSerial->print("MAVLINK_MSG_ID_HEARTBEAT heartbeat base mode: ");
   localSerial->print(baseMode);
   localSerial->print(", custom mode: ");
   localSerial->print(customMode);
   localSerial->print(", remote system id: ");
   localSerial->print(remoteSystemId);
   localSerial->print(", remote component id: ");
-  localSerial->println(remoteComponentId);
+  localSerial->println(remoteComponentId);*/
 
   if (isFirstHeartbeat) {
-    /*if (!isFeedsStarted) {
-      startFeeds();
-    }*/
-    
-    //display->clear();
-    //display->drawString(10, 10, "Got heartbeat, requesting data", 0xFFFF);
+    localSerial->println("Got first heartbeat");
     
     isFirstHeartbeat = false;
+  } else {
+    localSerial->println("Got heartbeat");
   }
   
   lastHeartbeatTime = millis();

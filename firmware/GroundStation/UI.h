@@ -11,13 +11,8 @@ class UI {
     void clear();
     
     void showLoading(String message);
-    
-    void drawStringCentered(int x, int y, String string, Display::Color color = 0xFFFF, int size = 1);
-    
-    int calculateStringWidth(int stringLength, int size = 1);
-    int calculateStringHeight(int size = 1);
-    
-    void testDrawStringCenter(int size);
+    void renderFooter(String monitorState);
+    void renderHeader(boolean isBluetoothConnected, float localBatteryVoltage);
     
   private:
     Display *display;

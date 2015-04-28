@@ -1,19 +1,21 @@
 ---------------------------------------------------------------------------
-NCDrill File Report For: ground-station.PcbDoc   31.03.2015  16:01:33
+NCDrill File Report For: ground-station.PcbDoc   28.04.2015  12:14:12
 ---------------------------------------------------------------------------
 
 Layer Pair : Top Layer to Bottom Layer
-ASCII RoundHoles File : ground-station.TXT
+ASCII RoundHoles File : ground-station-RoundHoles.TXT
+ASCII SlotHoles File : ground-station-SlotHoles.TXT
 
 Tool         Hole Size           Hole Type     Hole Count Plated       Tool Travel
 ---------------------------------------------------------------------------
-T1        12mil (0.3048mm)         Round          21               4.21 Inch (106.91 mm)
-T2        30mil (0.762mm)          Round          6                0.45 Inch (11.43 mm)
-T3        31mil (0.7874mm)         Round          2                0.08 Inch (2.00 mm)
-T4        39mil (0.9906mm)         Round          4                0.30 Inch (7.62 mm)
-T5        40mil (1.016mm)          Round          29               4.11 Inch (104.39 mm)
-T6        43mil (1.0922mm)         Round          11               1.00 Inch (25.40 mm)
+T1        12mil (0.3048mm)         Round          148              20.32 Inch (516.12 mm)
+T2        26mil (0.6604mm)         Slot           4                285.68 Inch (7256.19 mm)
+T3        28mil (0.7112mm)         Round          4                0.24 Inch (6.00 mm)
+T4        30mil (0.762mm)          Round          6                0.45 Inch (11.43 mm)
+T5        31mil (0.7874mm)         Round          2                0.08 Inch (2.00 mm)
+T6        39mil (0.9906mm)         Round          14               2.50 Inch (63.54 mm)
+T7        43mil (1.0922mm)         Round          11               1.00 Inch (25.40 mm)
 ---------------------------------------------------------------------------
-Totals                                            73               10.15 Inch (257.75 mm)
+Totals                                            189              310.26 Inch (7880.68 mm)
 
 Total Processing Time (hh:mm:ss) : 00:00:00

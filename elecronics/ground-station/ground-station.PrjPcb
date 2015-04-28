@@ -155,63 +155,105 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=
 
+[Document8]
+DocumentPath=cam\gerber-v1.1.Cam
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=-1
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=1
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=
+
+[Document9]
+DocumentPath=cam\drill-v1.1.Cam
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=-1
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=1
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=
+
 [GeneratedDocument1]
-DocumentPath=Project Outputs for ground-station\ground-station.DRR
+DocumentPath=Project Outputs for ground-station\ground-station-RoundHoles.TXT
 DItemRevisionGUID=
 
 [GeneratedDocument2]
-DocumentPath=Project Outputs for ground-station\ground-station.EXTREP
+DocumentPath=Project Outputs for ground-station\ground-station-SlotHoles.TXT
 DItemRevisionGUID=
 
 [GeneratedDocument3]
-DocumentPath=Project Outputs for ground-station\ground-station.GBL
+DocumentPath=Project Outputs for ground-station\ground-station.DRR
 DItemRevisionGUID=
 
 [GeneratedDocument4]
-DocumentPath=Project Outputs for ground-station\ground-station.GBO
+DocumentPath=Project Outputs for ground-station\ground-station.EXTREP
 DItemRevisionGUID=
 
 [GeneratedDocument5]
-DocumentPath=Project Outputs for ground-station\ground-station.GBS
+DocumentPath=Project Outputs for ground-station\ground-station.GBL
 DItemRevisionGUID=
 
 [GeneratedDocument6]
-DocumentPath=Project Outputs for ground-station\ground-station.GD1
+DocumentPath=Project Outputs for ground-station\ground-station.GBO
 DItemRevisionGUID=
 
 [GeneratedDocument7]
-DocumentPath=Project Outputs for ground-station\ground-station.GG1
+DocumentPath=Project Outputs for ground-station\ground-station.GBS
 DItemRevisionGUID=
 
 [GeneratedDocument8]
-DocumentPath=Project Outputs for ground-station\ground-station.GM1
+DocumentPath=Project Outputs for ground-station\ground-station.GD1
 DItemRevisionGUID=
 
 [GeneratedDocument9]
-DocumentPath=Project Outputs for ground-station\ground-station.GTL
+DocumentPath=Project Outputs for ground-station\ground-station.GG1
 DItemRevisionGUID=
 
 [GeneratedDocument10]
-DocumentPath=Project Outputs for ground-station\ground-station.GTO
+DocumentPath=Project Outputs for ground-station\ground-station.GM1
 DItemRevisionGUID=
 
 [GeneratedDocument11]
-DocumentPath=Project Outputs for ground-station\ground-station.GTS
+DocumentPath=Project Outputs for ground-station\ground-station.GTL
 DItemRevisionGUID=
 
 [GeneratedDocument12]
-DocumentPath=Project Outputs for ground-station\ground-station.LDP
+DocumentPath=Project Outputs for ground-station\ground-station.GTO
 DItemRevisionGUID=
 
 [GeneratedDocument13]
-DocumentPath=Project Outputs for ground-station\ground-station.REP
+DocumentPath=Project Outputs for ground-station\ground-station.GTS
 DItemRevisionGUID=
 
 [GeneratedDocument14]
-DocumentPath=Project Outputs for ground-station\ground-station.RUL
+DocumentPath=Project Outputs for ground-station\ground-station.LDP
 DItemRevisionGUID=
 
 [GeneratedDocument15]
+DocumentPath=Project Outputs for ground-station\ground-station.REP
+DItemRevisionGUID=
+
+[GeneratedDocument16]
+DocumentPath=Project Outputs for ground-station\ground-station.RUL
+DItemRevisionGUID=
+
+[GeneratedDocument17]
 DocumentPath=Project Outputs for ground-station\ground-station.TXT
 DItemRevisionGUID=
 

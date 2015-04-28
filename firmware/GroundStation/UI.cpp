@@ -1,51 +1,79 @@
 #include "UI.h"
 
 UI::UI(Display *display) : display(display) {
-
+  clear();
 };
 
 void UI::clear() {
-  display->clear(Display::BLACK);
+  display->clear();
 }
 
 void UI::showLoading(String message) {
-  clear();
-  
-  drawStringCentered(display->width / 2, display->height / 2, message, Display::WHITE, 2);
+  display->drawStringLineCentered(
+    display->width / 2,
+    display->height / 2,
+    message,
+    Display::WHITE,
+    Display::BLACK,
+    2
+  );
 }
 
-void UI::drawStringCentered(int x, int y, String string, Display::Color color, int size) {
-  int stringWidth = calculateStringWidth(string.length(), size);
-  int stringHeight = calculateStringHeight(size);
+void UI::renderFooter(String monitorState) {
+  int size = 1;
+  int lineHeight = display->calculateStringHeight(size);
   
-  display->drawString(
-    x - stringWidth / 2,
-    y - stringHeight / 2,
-    string,
-    color,
+  // draw header background
+  display->fillRect(0, display->height - 15, display->width, 15, Display::GRAY_50);
+  
+  display->drawStringCentered(
+    display->width / 2,
+    display->height - lineHeight,
+    monitorState,
+    Display::WHITE,
+    Display::BLACK,
     size
   );
 }
 
-int UI::calculateStringWidth(int stringLength, int size) {
-  return stringLength * 6 * size;
-}
-
-int UI::calculateStringHeight(int size) {
-  return 7 * size;
-}
-
-void UI::testDrawStringCenter(int size) {
-  clear();
+void UI::renderHeader(boolean isBluetoothConnected, float localBatteryVoltage) {
+  int size = 1;
+  String bluetoothStatusText = "BT";
+  int textWidth = display->calculateStringWidth(bluetoothStatusText.length(), size);
+  int textHeight = display->calculateStringHeight(size);
   
-  char buf[100];
+  // draw header background
+  display->fillRect(0, 0, display->width, 15, Display::GRAY_50);
   
-  for (int i = 0; i < 20; i++) {
-    buf[i] = 'X';
-    buf[i + 1] = '\0';
-    
-    String str(buf);
-    
-    drawStringCentered(display->width / 2, i * 8 * size, str, Display::WHITE, size);
+  float lowBatteryLevel = 3.8f;
+  float criticalBatteryLevel = 3.4f;
+  Display::Color batteryColor;
+  
+  if (localBatteryVoltage <= criticalBatteryLevel) {
+    batteryColor = Display::RED;
+  } else if (localBatteryVoltage <= lowBatteryLevel) {
+    batteryColor = Display::YELLOW;
+  } else {
+    batteryColor = Display::GREEN;
   }
+  
+  // draw local battery voltage in top left corner
+  display->drawString(
+    3,
+    4,
+    String(localBatteryVoltage) + "V",
+    batteryColor,
+    Display::BLACK,
+    size
+  );
+  
+  // draw bluetooth state in top right corner
+  display->drawString(
+    display->width - textWidth - 3,
+    4,
+    bluetoothStatusText,
+    isBluetoothConnected ? Display::GREEN : Display::RED,
+    Display::BLACK,
+    size
+  );
 }
