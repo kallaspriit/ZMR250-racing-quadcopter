@@ -3,7 +3,7 @@
 
 #define swap(a, b) { uint16_t t = a; a = b; b = t; }
 
-#include <WProgram.h>
+#include <Arduino.h>
 
 #define ST7735_NOP 0x0
 #define ST7735_SWRESET 0x01

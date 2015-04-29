@@ -1,6 +1,7 @@
 #include "Display.h"
 #include "UI.h"
 #include "State.h"
+#include "Device.h"
 
 #include <mavlink.h>
 #include <SPI.h>
@@ -23,16 +24,10 @@ const unsigned long batteryReadingInterval = 1000;
 const unsigned long chargerReadingInterval = 1000;
 
 // runtime information
-State state = State::INITIALIZING;
+State state = State::LOADING;
 bool isChargingBattery = true;
 boolean isFirstHeartbeat = true;
 float localBatteryVoltage = 4.2f;
-
-// mavlink information
-int remoteSystemId = 0;
-int remoteComponentId = 0;
-int baseMode = 0;
-int customMode = 0;
 
 // timing book-keeping
 unsigned long lastLoopMicrotime = 0;
@@ -51,6 +46,7 @@ volatile int lastBluetoothState = LOW;
 // class instances
 Display *display = NULL;
 UI *ui = NULL;
+Device *device = NULL;
 
 // serial pointers
 usb_serial_class *localSerial = &Serial;
@@ -67,6 +63,7 @@ void setup() {
   setupInterrupts();
   setupDisplay();
   setupUserInterface();
+  setupDevice();
   setupSensors();
   setupStateMachine();
 }
@@ -145,6 +142,13 @@ void setupUserInterface() {
 }
 
 /**
+ * Sets up the device.
+ */
+void setupDevice() {
+  device = new Device();
+}
+
+/**
  * Sets up sensors, taking first readings.
  */
 void setupSensors() {
@@ -184,7 +188,10 @@ void stepReadMavlink(unsigned long currentTime, unsigned long dt) {
       switch(msg.msgid) {
         case MAVLINK_MSG_ID_HEARTBEAT:
           handleMavlinkHeartbeat(&msg);
-         
+        break;
+        
+        case MAVLINK_MSG_ID_SYS_STATUS:
+          handleMavlinkSystemStatus(&msg);
         break;
         
         case MAVLINK_MSG_ID_ATTITUDE:
@@ -195,7 +202,7 @@ void stepReadMavlink(unsigned long currentTime, unsigned long dt) {
         
         // also getting 36, 35, 1, 42, 24, 62, 74, 27, 29, 33, 34
         default:
-          localSerial->print("Got message with id: ");
+          localSerial->print("Got unhandled message with id: ");
           localSerial->println(msg.msgid);
         break;
       }
@@ -293,8 +300,6 @@ void stepStateMachine(unsigned long currentTime, unsigned long dt) {
   }
 }
 
-boolean x = false;
-
 /**
  * Updates the user interface.
  *
@@ -308,18 +313,27 @@ void stepUserInterface(unsigned long currentTime, unsigned long dt) {
     return;  
   }
   
-  if (x) {
-    ui->showLoading("FIRST");
-  } else {
-    ui->showLoading("SECOND");
-  }
-  
   ui->renderHeader(isBluetoothConnected(), localBatteryVoltage, isChargingBattery);
   ui->renderFooter(getCurrentStateName());
   
-  x = !x;
-  
-  /*ui->showLoading(getCurrentStateName());*/
+  switch (state) {
+    case State::LOADING:
+      ui->renderLoadingView("LOADING", UI::LARGE);
+    break;
+    
+    case State::DISCONNECTED:
+      ui->renderLoadingView("Waiting for uplink", UI::SMALL);
+    break;
+    
+    case State::CONNECTED:
+      ui->renderLoadingView("Waiting for heartbeat", UI::SMALL);
+    break;
+    
+    case State::MONITORING:
+      // TODO Make it possible to switch between different views with a button
+      ui->renderDetailsView(device);
+    break;
+  }
   
   lastUserInterfaceUpdateTime = currentTime;
 }
@@ -338,6 +352,9 @@ void setState(State newState) {
   
   State oldState = state;
   state = newState;
+  
+  // clear UI of existing views on state change
+  ui->clear();
 
   localSerial->print("Transition from state ");
   localSerial->print(getStateName(oldState));
@@ -390,11 +407,11 @@ void requestMavlinkFeeds() {
   mavlink_message_t msg;
   
   // first disable all
-  mavlink_msg_request_data_stream_pack(127, 0, &msg, remoteSystemId, remoteComponentId, MAV_DATA_STREAM_ALL, 0, 0);
+  mavlink_msg_request_data_stream_pack(127, 0, &msg, device->systemId, device->componentId, MAV_DATA_STREAM_ALL, 0, 0);
   sendMavlinkMessage(&msg);
   
   // then request all
-  mavlink_msg_request_data_stream_pack(127, 0, &msg, remoteSystemId, remoteComponentId, MAV_DATA_STREAM::MAV_DATA_STREAM_ALL, 1, 1);
+  mavlink_msg_request_data_stream_pack(127, 0, &msg, device->systemId, device->componentId, MAV_DATA_STREAM::MAV_DATA_STREAM_ALL, 1, 1);
   sendMavlinkMessage(&msg);
   
   lastStartFeedsTime = millis();
@@ -414,6 +431,7 @@ void sendMavlinkMessage(mavlink_message_t* msg) {
   delay(10);
 }
 
+// https://pixhawk.ethz.ch/mavlink/#HEARTBEAT
 void handleMavlinkHeartbeat(mavlink_message_t *msg) {
   mavlink_heartbeat_t packet;
   mavlink_msg_heartbeat_decode(msg, &packet);
@@ -423,20 +441,12 @@ void handleMavlinkHeartbeat(mavlink_message_t *msg) {
     return;
   }
  
-  remoteSystemId = (*msg).sysid; // save the sysid and compid of the received heartbeat for use in sending new messages
-  remoteComponentId = (*msg).compid;
-  baseMode = packet.base_mode;
-  customMode = packet.custom_mode;
+  // store device system info
+  device->systemId = (*msg).sysid; // save the sysid and compid of the received heartbeat for use in sending new messages
+  device->componentId = (*msg).compid;
+  device->baseMode = packet.base_mode;
+  device->customMode = packet.custom_mode;
   
-  /*localSerial->print("MAVLINK_MSG_ID_HEARTBEAT heartbeat base mode: ");
-  localSerial->print(baseMode);
-  localSerial->print(", custom mode: ");
-  localSerial->print(customMode);
-  localSerial->print(", remote system id: ");
-  localSerial->print(remoteSystemId);
-  localSerial->print(", remote component id: ");
-  localSerial->println(remoteComponentId);*/
-
   if (isFirstHeartbeat) {
     localSerial->println("Got first heartbeat");
     
@@ -448,45 +458,26 @@ void handleMavlinkHeartbeat(mavlink_message_t *msg) {
   lastHeartbeatTime = millis();
 }
 
+// https://pixhawk.ethz.ch/mavlink/#SYS_STATUS
+void handleMavlinkSystemStatus(mavlink_message_t *msg) {
+  mavlink_sys_status_t packet;
+  
+  mavlink_msg_sys_status_decode(msg, &packet);
+  
+  // converts millivolts to volts
+  device->voltage = (float)packet.voltage_battery / 1000.0f;
+  device->current = (float)packet.current_battery / 100.0f;
+}
+
+// https://pixhawk.ethz.ch/mavlink/#ATTITUDE
 void handleMavlinkAttitude(mavlink_message_t *msg) {
   mavlink_attitude_t packet;
-  float pitch, yaw, roll;
   
   mavlink_msg_attitude_decode(msg, &packet);
           
-  pitch = radToDeg(packet.pitch);
-  yaw = radToDeg(packet.yaw);
-  roll = radToDeg(packet.roll);
-  
-  localSerial->print("MAVLINK_MSG_ID_ATTITUDE pitch: ");
-  localSerial->print(pitch);
-  localSerial->print("deg, yaw: ");
-  localSerial->print(yaw);
-  localSerial->print("deg, roll ");
-  localSerial->print(roll);
-  localSerial->println("deg ");
-  
-  String pitchText = "";
-  String yawText = "";
-  String rollText = "";
-  
-  pitchText += "Pitch: ";
-  pitchText += pitch;
-  pitchText += "deg";
-  
-  yawText += "Yaw: ";
-  yawText += yaw;
-  yawText += "deg";
-  
-  rollText += "Roll: ";
-  rollText += roll;
-  rollText += "deg";
-  
-  /*display->clear();
-  
-  display->drawString(10, 10, pitchText, 0xFFFF);
-  display->drawString(10, 20, yawText, 0xFFFF);
-  display->drawString(10, 30, rollText, 0xFFFF);*/
+  device->pitch = radToDeg(packet.pitch);
+  device->yaw = radToDeg(packet.yaw);
+  device->roll = radToDeg(packet.roll);
 }
 
 float radToDeg(float radians) {

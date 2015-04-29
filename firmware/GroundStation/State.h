@@ -3,7 +3,6 @@
 
 // state machine states
 enum State {
-  INITIALIZING,
   LOADING,
   DISCONNECTED,
   CONNECTED,
@@ -18,9 +17,6 @@ enum State {
  */
 String getStateName(State state) {
   switch (state) {
-    case State::INITIALIZING:
-      return "INITIALIZING";
-      
     case State::LOADING:
       return "LOADING";
       

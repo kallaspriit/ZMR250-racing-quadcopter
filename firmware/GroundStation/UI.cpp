@@ -1,4 +1,5 @@
 #include "UI.h"
+#include "Device.h"
 
 UI::UI(Display *display) : display(display) {
   clear();
@@ -6,17 +7,6 @@ UI::UI(Display *display) : display(display) {
 
 void UI::clear() {
   display->clear();
-}
-
-void UI::showLoading(String message) {
-  display->drawStringLineCentered(
-    display->width / 2,
-    display->height / 2,
-    message,
-    Display::WHITE,
-    Display::BLACK,
-    2
-  );
 }
 
 void UI::renderHeader(boolean isBluetoothConnected, float localBatteryVoltage, boolean isChargingBattery) {
@@ -76,4 +66,50 @@ void UI::renderFooter(String monitorState) {
     Display::BLACK,
     size
   );
+}
+
+void UI::renderLoadingView(String message, int size) {
+  display->drawStringLineCentered(
+    display->width / 2,
+    display->height / 2,
+    message,
+    Display::WHITE,
+    Display::BLACK,
+    size
+  );
+}
+
+void UI::renderDetailsView(Device *device) {
+  String pitchText = "";
+  pitchText += "Pitch: ";
+  pitchText += device->pitch;
+  pitchText += " deg";
+  
+  String yawText = "";
+  yawText += "Yaw: ";
+  yawText += device->yaw;
+  yawText += " deg";
+  
+  String rollText = "";
+  rollText += "Roll: ";
+  rollText += device->roll;
+  rollText += " deg";
+  
+  String voltageText = "";
+  voltageText += "Voltage: ";
+  voltageText += device->voltage;
+  voltageText += "V";
+  
+  String currentText = "";
+  currentText += "Current: ";
+  currentText += device->current > 0.0f ? (String(device->current) + "A") : "n/a";
+  
+  int lineHeight = 10;
+  int posY = 20 - lineHeight;
+  
+  display->drawStringLine(4, posY += lineHeight, pitchText);
+  display->drawStringLine(4, posY += lineHeight, yawText);
+  display->drawStringLine(4, posY += lineHeight, rollText);
+  display->drawStringLine(4, posY += lineHeight, voltageText);
+  display->drawStringLine(4, posY += lineHeight, currentText);
 }
