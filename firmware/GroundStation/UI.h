@@ -11,8 +11,8 @@ class UI {
     void clear();
     
     void showLoading(String message);
+    void renderHeader(boolean isBluetoothConnected, float localBatteryVoltage, boolean isChargingBattery);
     void renderFooter(String monitorState);
-    void renderHeader(boolean isBluetoothConnected, float localBatteryVoltage);
     
   private:
     Display *display;

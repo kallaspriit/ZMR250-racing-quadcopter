@@ -19,24 +19,7 @@ void UI::showLoading(String message) {
   );
 }
 
-void UI::renderFooter(String monitorState) {
-  int size = 1;
-  int lineHeight = display->calculateStringHeight(size);
-  
-  // draw header background
-  display->fillRect(0, display->height - 15, display->width, 15, Display::GRAY_50);
-  
-  display->drawStringCentered(
-    display->width / 2,
-    display->height - lineHeight,
-    monitorState,
-    Display::WHITE,
-    Display::BLACK,
-    size
-  );
-}
-
-void UI::renderHeader(boolean isBluetoothConnected, float localBatteryVoltage) {
+void UI::renderHeader(boolean isBluetoothConnected, float localBatteryVoltage, boolean isChargingBattery) {
   int size = 1;
   String bluetoothStatusText = "BT";
   int textWidth = display->calculateStringWidth(bluetoothStatusText.length(), size);
@@ -61,7 +44,7 @@ void UI::renderHeader(boolean isBluetoothConnected, float localBatteryVoltage) {
   display->drawString(
     3,
     4,
-    String(localBatteryVoltage) + "V",
+    String(localBatteryVoltage) + "V" + (isChargingBattery ? "++" : ""),
     batteryColor,
     Display::BLACK,
     size
@@ -73,6 +56,23 @@ void UI::renderHeader(boolean isBluetoothConnected, float localBatteryVoltage) {
     4,
     bluetoothStatusText,
     isBluetoothConnected ? Display::GREEN : Display::RED,
+    Display::BLACK,
+    size
+  );
+}
+
+void UI::renderFooter(String monitorState) {
+  int size = 1;
+  int lineHeight = display->calculateStringHeight(size);
+  
+  // draw header background
+  display->fillRect(0, display->height - 15, display->width, 15, Display::GRAY_50);
+  
+  display->drawStringCentered(
+    display->width / 2,
+    display->height - lineHeight - 1,
+    monitorState,
+    Display::WHITE,
     Display::BLACK,
     size
   );

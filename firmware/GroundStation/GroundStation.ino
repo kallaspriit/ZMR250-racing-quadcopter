@@ -13,15 +13,18 @@ const int DISPLAY_MOSI_PIN = 11;
 const int DISPLAY_SCLK_PIN = 13;
 const int SERIAL2_TX_PIN = 10;
 const int BAT_SENSE_PIN = 16;
+const int BAT_CHARGER_STATE_PIN = 15;
 const int BT_STATUS_PIN = 17;
 
 // application config
 const int LOCAL_SERIAL_BAUDRATE = 115200;
 const int REMOTE_SERIAL_BAUDRATE = 115200;
 const unsigned long batteryReadingInterval = 1000;
+const unsigned long chargerReadingInterval = 1000;
 
 // runtime information
 State state = State::INITIALIZING;
+bool isChargingBattery = true;
 boolean isFirstHeartbeat = true;
 float localBatteryVoltage = 4.2f;
 
@@ -38,6 +41,7 @@ unsigned long lastMessageReceiveTime = 0;
 unsigned long lastDataReceiveTime = 0;
 unsigned long lastStartFeedsTime = 0;
 unsigned long lastBatterySenseTime = 0;
+unsigned long lastChargerSenseTime = 0;
 unsigned long lastUserInterfaceUpdateTime = 0;
 
 // bluetooth state tracking
@@ -79,6 +83,7 @@ void loop() {
   
   stepReadMavlink(currentTime, dt);
   stepBatteryMonitor(currentTime, dt);
+  stepChargerMonitor(currentTime, dt);
   stepFeedMonitor(currentTime, dt);
   stepStateMachine(currentTime, dt);
   stepUserInterface(currentTime, dt);
@@ -101,6 +106,9 @@ void setupIO() {
   
   // battery voltage sensing uses ADC
   pinMode(BAT_SENSE_PIN, INPUT);
+  
+  // sense battery charging state
+  pinMode(BAT_CHARGER_STATE_PIN, INPUT);
   
   // listen for bluetooth status changes using interrupts
   pinMode(BT_STATUS_PIN, INPUT);
@@ -217,12 +225,33 @@ void stepBatteryMonitor(unsigned long currentTime, unsigned long dt) {
   int rawReading = analogRead(BAT_SENSE_PIN);
   localBatteryVoltage = (float)max(min(map(rawReading, 0, 970, 0, 420), 420), 0) / 100.0f;
   
-  localSerial->print("Battery reading: ");
+  /*localSerial->print("Battery reading: ");
   localSerial->print(rawReading);
   localSerial->print(", voltage: ");
-  localSerial->println(localBatteryVoltage);
+  localSerial->println(localBatteryVoltage);*/
   
   lastBatterySenseTime = currentTime;
+}
+
+/**
+ * Periodically checks battery charger state.
+ *
+ * @param currentTime Current step time in milliseconds
+ * @param dt Time since last step in microseconds
+ */
+void stepChargerMonitor(unsigned long currentTime, unsigned long dt) {
+  if (currentTime - lastChargerSenseTime < chargerReadingInterval) {
+    return;  
+  }
+  
+  int state = digitalRead(BAT_CHARGER_STATE_PIN);
+  
+  isChargingBattery = state == LOW;
+  
+  /*localSerial->print("Battery charger state: ");
+  localSerial->println(rawReading);*/
+  
+  lastChargerSenseTime = currentTime;
 }
 
 /**
@@ -285,7 +314,7 @@ void stepUserInterface(unsigned long currentTime, unsigned long dt) {
     ui->showLoading("SECOND");
   }
   
-  ui->renderHeader(isBluetoothConnected(), localBatteryVoltage);
+  ui->renderHeader(isBluetoothConnected(), localBatteryVoltage, isChargingBattery);
   ui->renderFooter(getCurrentStateName());
   
   x = !x;
