@@ -18,13 +18,13 @@ const int BAT_CHARGER_STATE_PIN = 15;
 const int BT_STATUS_PIN = 17;
 
 // application config
-const int LOCAL_SERIAL_BAUDRATE = 115200;
-const int REMOTE_SERIAL_BAUDRATE = 115200;
+const int LOCAL_SERIAL_BAUDRATE = 115200; // 115200
+const int REMOTE_SERIAL_BAUDRATE = 57600; // 115200
 const unsigned long batteryReadingInterval = 1000;
 const unsigned long chargerReadingInterval = 1000;
 
 // runtime information
-State state = State::LOADING;
+int state = LOADING;
 bool isChargingBattery = true;
 boolean isFirstHeartbeat = true;
 float localBatteryVoltage = 4.2f;
@@ -52,7 +52,10 @@ Device *device = NULL;
 usb_serial_class *localSerial = &Serial;
 HardwareSerial2 *remoteSerial = &Serial2;
 
-void setState(State state);
+//Serial_ *localSerial = &Serial;
+//HardwareSerial *remoteSerial = &Serial1;
+
+//void setState(int state);
 
 /**
  * Sets up the application resources.
@@ -160,7 +163,7 @@ void setupSensors() {
  * Sets up the state machine.
  */
 void setupStateMachine() {
-  setState(State::LOADING);
+  setState(LOADING);
 }
 
 /**
@@ -202,8 +205,8 @@ void stepReadMavlink(unsigned long currentTime, unsigned long dt) {
         
         // also getting 36, 35, 1, 42, 24, 62, 74, 27, 29, 33, 34
         default:
-          localSerial->print("Got unhandled message with id: ");
-          localSerial->println(msg.msgid);
+          /*localSerial->print("Got unhandled message with id: ");
+          localSerial->println(msg.msgid);*/
         break;
       }
     }
@@ -289,14 +292,14 @@ void stepStateMachine(unsigned long currentTime, unsigned long dt) {
   
   if (lastHeartbeatTime != 0) {
     if (timeSinceDataReceived < 5000) {
-      setState(State::MONITORING);
-    } else if (timeSinceHeartbeatReceived < 5000) {
-      setState(State::CONNECTED);
+      setState(MONITORING);
+    } else if (lastMessageReceiveTime < 5000) {
+      setState(CONNECTED);
     } else {
-      setState(State::DISCONNECTED);
+      setState(DISCONNECTED);
     }
   } else {
-    setState(State::DISCONNECTED);
+    setState(DISCONNECTED);
   }
 }
 
@@ -313,23 +316,25 @@ void stepUserInterface(unsigned long currentTime, unsigned long dt) {
     return;  
   }
   
+  //localSerial->println("Render");
+  
   ui->renderHeader(isBluetoothConnected(), localBatteryVoltage, isChargingBattery);
   ui->renderFooter(getCurrentStateName());
   
   switch (state) {
-    case State::LOADING:
+    case LOADING:
       ui->renderLoadingView("LOADING", UI::LARGE);
     break;
     
-    case State::DISCONNECTED:
+    case DISCONNECTED:
       ui->renderLoadingView("Waiting for uplink", UI::SMALL);
     break;
     
-    case State::CONNECTED:
+    case CONNECTED:
       ui->renderLoadingView("Waiting for heartbeat", UI::SMALL);
     break;
     
-    case State::MONITORING:
+    case MONITORING:
       // TODO Make it possible to switch between different views with a button
       ui->renderDetailsView(device);
     break;
@@ -344,13 +349,13 @@ void stepUserInterface(unsigned long currentTime, unsigned long dt) {
  * @param currentTime Current step time in milliseconds
  * @param dt Time since last step in microseconds
  */
-void setState(State newState) {
+void setState(int newState) {
   // ignore request if state does not change
   if (newState == state) {
     return;  
   }
   
-  State oldState = state;
+  int oldState = state;
   state = newState;
   
   // clear UI of existing views on state change
@@ -411,7 +416,7 @@ void requestMavlinkFeeds() {
   sendMavlinkMessage(&msg);
   
   // then request all
-  mavlink_msg_request_data_stream_pack(127, 0, &msg, device->systemId, device->componentId, MAV_DATA_STREAM::MAV_DATA_STREAM_ALL, 1, 1);
+  mavlink_msg_request_data_stream_pack(127, 0, &msg, device->systemId, device->componentId, MAV_DATA_STREAM_ALL, 1, 1);
   sendMavlinkMessage(&msg);
   
   lastStartFeedsTime = millis();
@@ -478,6 +483,8 @@ void handleMavlinkAttitude(mavlink_message_t *msg) {
   device->pitch = radToDeg(packet.pitch);
   device->yaw = radToDeg(packet.yaw);
   device->roll = radToDeg(packet.roll);
+  
+  //localSerial->println("got attitude");
 }
 
 float radToDeg(float radians) {

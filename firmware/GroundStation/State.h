@@ -9,24 +9,29 @@ enum State {
   MONITORING
 };
 
+/*const int STATE_LOADING = 1;
+const int STATE_DISCONNECTED = 2;
+const int STATE_CONNECTED = 3;
+const int STATE_MONITORING = 4;*/
+
 /**
  * Returns state enum name as string.
  *
  * @param state State enum value
  * @return State name
  */
-String getStateName(State state) {
+String getStateName(int state) {
   switch (state) {
-    case State::LOADING:
+    case LOADING:
       return "LOADING";
       
-    case State::DISCONNECTED:
+    case DISCONNECTED:
       return "DISCONNECTED";
       
-    case State::CONNECTED:
+    case CONNECTED:
       return "CONNECTED";
       
-    case State::MONITORING:
+    case MONITORING:
       return "MONITORING";
       
     default:

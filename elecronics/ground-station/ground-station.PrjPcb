@@ -105,40 +105,6 @@ GenerateClassCluster=0
 DocumentUniqueId=NCIDUQOK
 
 [Document5]
-DocumentPath=cam\gerber-v1.0.Cam
-AnnotationEnabled=1
-AnnotateStartValue=1
-AnnotationIndexControlEnabled=0
-AnnotateSuffix=
-AnnotateScope=All
-AnnotateOrder=-1
-DoLibraryUpdate=1
-DoDatabaseUpdate=1
-ClassGenCCAutoEnabled=1
-ClassGenCCAutoRoomEnabled=1
-ClassGenNCAutoScope=None
-DItemRevisionGUID=
-GenerateClassCluster=0
-DocumentUniqueId=
-
-[Document6]
-DocumentPath=cam\drill-v1.0.Cam
-AnnotationEnabled=1
-AnnotateStartValue=1
-AnnotationIndexControlEnabled=0
-AnnotateSuffix=
-AnnotateScope=All
-AnnotateOrder=-1
-DoLibraryUpdate=1
-DoDatabaseUpdate=1
-ClassGenCCAutoEnabled=1
-ClassGenCCAutoRoomEnabled=1
-ClassGenNCAutoScope=None
-DItemRevisionGUID=
-GenerateClassCluster=0
-DocumentUniqueId=
-
-[Document7]
 DocumentPath=ground-station.OutJob
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -155,7 +121,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=
 
-[Document8]
+[Document6]
 DocumentPath=cam\gerber-v1.1.Cam
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -172,7 +138,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=
 
-[Document9]
+[Document7]
 DocumentPath=cam\drill-v1.1.Cam
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -251,10 +217,6 @@ DItemRevisionGUID=
 
 [GeneratedDocument16]
 DocumentPath=Project Outputs for ground-station\ground-station.RUL
-DItemRevisionGUID=
-
-[GeneratedDocument17]
-DocumentPath=Project Outputs for ground-station\ground-station.TXT
 DItemRevisionGUID=
 
 [Configuration1]
