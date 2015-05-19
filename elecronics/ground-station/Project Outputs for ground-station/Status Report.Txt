@@ -1,13 +1,23 @@
-Output: NC Drill Files
-Type  : NC Drill
-From  : Project [ground-station.PrjPcb]
-   Generated File[ground-station-RoundHoles.TXT]
-   Generated File[ground-station-SlotHoles.TXT]
-   Generated File[ground-station.LDP]
-   Generated File[ground-station.DRR]
+Output: Gerber Files
+Type  : Gerber
+From  : Variant [[No Variations]] of Project [ground-station.PrjPcb]
+   Generated File[ground-station.GTL]
+   Generated File[ground-station.GBL]
+   Generated File[ground-station.GTO]
+   Generated File[ground-station.GTP]
+   Generated File[ground-station.GTS]
+   Generated File[ground-station.GBS]
+   Generated File[ground-station.GBP]
+   Generated File[ground-station.GBO]
+   Generated File[ground-station.GM1]
+   Generated File[ground-station.GD1]
+   Generated File[ground-station.GG1]
+   Generated File[ground-station.RUL]
+   Generated File[ground-station.EXTREP]
+   Generated File[ground-station.REP]
 
 
-Files Generated   : 4
+Files Generated   : 14
 Documents Printed : 0
 
-Finished Output Generation At 12:14:12 On 28.04.2015
+Finished Output Generation At 19:07:25 On 17.05.2015

@@ -45,10 +45,10 @@ Generating : Bottom Layer
 
 
 Used DCodes :
+    D11
     D12
-    D13
-    D15
-    D17
+    D14
+    D16
     D19
     D20
     D21
@@ -80,7 +80,7 @@ Generating : Top Overlay
 
 
 Used DCodes :
-    D21
+    D19
     D40
     D41
     D42
@@ -90,6 +90,29 @@ Used DCodes :
     D46
     D47
     D48
+*************************************************************
+
+*************************************************************
+Generating : Top Paste
+      File : ground-station.GTP
+
+    Adding Layer      : Top Paste
+
+    Adding Layer      : Top Layer
+
+    Adding Layer      : Multi-Layer
+
+
+Used DCodes :
+    D10
+    D11
+    D12
+    D13
+    D14
+    D15
+    D16
+    D17
+    D18
 *************************************************************
 
 *************************************************************
@@ -135,10 +158,10 @@ Generating : Bottom Solder
 
 
 Used DCodes :
+    D50
     D51
-    D52
-    D54
-    D56
+    D53
+    D55
     D58
     D59
     D60
@@ -157,6 +180,31 @@ Used DCodes :
 *************************************************************
 
 *************************************************************
+Generating : Bottom Paste
+      File : ground-station.GBP
+
+    Adding Layer      : Bottom Paste
+
+    Adding Layer      : Bottom Layer
+
+    Adding Layer      : Multi-Layer
+
+
+Used DCodes :
+    D11
+    D12
+    D14
+    D16
+    D32
+    D33
+    D34
+    D35
+    D36
+    D37
+    D38
+*************************************************************
+
+*************************************************************
 Generating : Bottom Overlay
       File : ground-station.GBO
 
@@ -164,7 +212,7 @@ Generating : Bottom Overlay
 
 
 Used DCodes :
-    D21
+    D19
     D40
     D73
     D74
