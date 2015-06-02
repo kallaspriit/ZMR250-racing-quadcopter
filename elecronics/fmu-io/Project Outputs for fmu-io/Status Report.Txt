@@ -1,0 +1,12 @@
+Output: NC Drill Files
+Type  : NC Drill
+From  : Project [fmu-io.PrjPcb]
+   Generated File[fmu-io.TXT]
+   Generated File[fmu-io.LDP]
+   Generated File[fmu-io.DRR]
+
+
+Files Generated   : 3
+Documents Printed : 0
+
+Finished Output Generation At 20:11:37 On 2.06.2015

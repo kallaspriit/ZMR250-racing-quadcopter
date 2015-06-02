@@ -1,0 +1,17 @@
+---------------------------------------------------------------------------
+NCDrill File Report For: fmu-io.PcbDoc   2.06.2015  20:11:37
+---------------------------------------------------------------------------
+
+Layer Pair : Top Layer to Bottom Layer
+ASCII RoundHoles File : fmu-io.TXT
+
+Tool         Hole Size           Hole Type     Hole Count Plated       Tool Travel
+---------------------------------------------------------------------------
+T1        12mil (0.3048mm)         Round          21               5.46 Inch (138.61 mm)
+T2        28mil (0.7112mm)         Round          4                0.24 Inch (6.00 mm)
+T3        31mil (0.7874mm)         Round          2                0.30 Inch (7.60 mm)
+T4        39mil (0.9906mm)         Round          16               3.88 Inch (98.65 mm)
+---------------------------------------------------------------------------
+Totals                                            43               9.88 Inch (250.86 mm)
+
+Total Processing Time (hh:mm:ss) : 00:00:00
