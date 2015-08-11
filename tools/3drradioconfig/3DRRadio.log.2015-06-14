@@ -1,0 +1,438 @@
+2015-06-14 12:43:01,425 DEBUG MissionPlanner.Utilities.ThemeManager - Theme set to None (:0) [1]
+2015-06-14 12:43:08,475  INFO MissionPlanner._3DRradio - Connect btr 920 baud 57600 (:0) [1]
+2015-06-14 12:43:08,492  INFO MissionPlanner._3DRradio - Connect first response ??t
+            20 (:0) [1]
+2015-06-14 12:43:08,617  INFO MissionPlanner._3DRradio - Doing Command AT&T (:0) [1]
+2015-06-14 12:43:08,628  INFO MissionPlanner._3DRradio - cmd AT&T echo AT&T
+ (:0) [1]
+2015-06-14 12:43:09,680  INFO MissionPlanner._3DRradio - response 0 
+ (:0) [1]
+2015-06-14 12:43:09,799  INFO MissionPlanner._3DRradio - Doing Command ATI (:0) [1]
+2015-06-14 12:43:09,811  INFO MissionPlanner._3DRradio - cmd ATI echo ATI
+ (:0) [1]
+2015-06-14 12:43:10,915  INFO MissionPlanner._3DRradio - response 0 SiK 1.9 on HM-TRP
+
+
+ (:0) [1]
+2015-06-14 12:43:10,915  INFO MissionPlanner._3DRradio - Connect Version: SiK 1.9 on HM-TRP
+ (:0) [1]
+2015-06-14 12:43:11,030  INFO MissionPlanner._3DRradio - Doing Command AT&T (:0) [1]
+2015-06-14 12:43:11,042  INFO MissionPlanner._3DRradio - cmd AT&T echo AT&T
+ (:0) [1]
+2015-06-14 12:43:12,094  INFO MissionPlanner._3DRradio - response 0 
+ (:0) [1]
+2015-06-14 12:43:12,198  INFO MissionPlanner._3DRradio - Doing Command ATI (:0) [1]
+2015-06-14 12:43:12,209  INFO MissionPlanner._3DRradio - cmd ATI echo ATI
+ (:0) [1]
+2015-06-14 12:43:13,314  INFO MissionPlanner._3DRradio - response 0 SiK 1.9 on HM-TRP
+
+
+ (:0) [1]
+2015-06-14 12:43:13,429  INFO MissionPlanner._3DRradio - Doing Command RTI (:0) [1]
+2015-06-14 12:43:13,441  INFO MissionPlanner._3DRradio - cmd RTI echo RTI
+ (:0) [1]
+2015-06-14 12:43:14,638  INFO MissionPlanner._3DRradio - response 0 SiK 1.9 on HM-TRP
+
+
+ (:0) [1]
+2015-06-14 12:43:14,740  INFO MissionPlanner._3DRradio - Doing Command ATI3 (:0) [1]
+2015-06-14 12:43:14,752  INFO MissionPlanner._3DRradio - cmd ATI3 echo ATI3
+ (:0) [1]
+2015-06-14 12:43:15,854  INFO MissionPlanner._3DRradio - response 0 67
+
+
+ (:0) [1]
+2015-06-14 12:43:15,972  INFO MissionPlanner._3DRradio - Doing Command ATI2 (:0) [1]
+2015-06-14 12:43:15,983  INFO MissionPlanner._3DRradio - cmd ATI2 echo ATI2
+ (:0) [1]
+2015-06-14 12:43:17,086  INFO MissionPlanner._3DRradio - response 0 78
+
+
+ (:0) [1]
+2015-06-14 12:43:17,203  INFO MissionPlanner._3DRradio - Doing Command RTI2 (:0) [1]
+2015-06-14 12:43:17,214  INFO MissionPlanner._3DRradio - cmd RTI2 echo RTI2
+ (:0) [1]
+2015-06-14 12:43:17,488  INFO MissionPlanner._3DRradio - response 0 78
+
+ (:0) [1]
+2015-06-14 12:43:17,714  INFO MissionPlanner._3DRradio - Doing Command ATI7 (:0) [1]
+2015-06-14 12:43:17,726  INFO MissionPlanner._3DRradio - cmd ATI7 echo ATI7
+ (:0) [1]
+2015-06-14 12:43:18,846  INFO MissionPlanner._3DRradio - response 0 L/R RSSI: 196/196  L/R noise: 84/48 pkts: 550  txe=0 rxe=0 stx=0 srx=0 ecc=0/0 temp=-276 dco=0
+
+
+ (:0) [1]
+2015-06-14 12:43:18,962  INFO MissionPlanner._3DRradio - Doing Command ATI5 (:0) [1]
+2015-06-14 12:43:18,973  INFO MissionPlanner._3DRradio - cmd ATI5 echo ATI5
+ (:0) [1]
+2015-06-14 12:43:19,815  INFO MissionPlanner._3DRradio - response 0 S0:FORMAT=25
+
+S1:SERIAL_SPEED=57
+
+S2:AIR_SPEED=64
+
+S3:NETID=25
+
+S4:TXPOWER=11
+
+S5:ECC=1
+
+S6:MAVLINK=1
+
+S7:OPPRESEND=1
+
+S8:MIN_FREQ=433050
+
+S9:MAX_FREQ=434790
+
+S10:NUM_CHANNELS=10
+
+S11:DUTY_CYCLE=100
+
+S12:LBT_RSSI=0
+
+S13:MANCHESTER=0
+
+S14:RTSCTS=0
+
+S15:MAX_WINDOW=131
+
+ (:0) [1]
+2015-06-14 12:43:19,968  INFO MissionPlanner._3DRradio - Doing Command RTI5 (:0) [1]
+2015-06-14 12:43:19,981  INFO MissionPlanner._3DRradio - cmd RTI5 echo RTI5
+ (:0) [1]
+2015-06-14 12:43:21,185  INFO MissionPlanner._3DRradio - response 0 S0:FORMAT=25
+
+S1:SERIAL_SPEED=57
+
+S2:AIR_SPEED=64
+
+S3:NETID=25
+
+S4:TXPOWER=11
+
+S5:ECC=1
+
+S6:MAVLINK=1
+
+S7:OPPRESEND=1
+
+S8:MIN_FREQ=433050
+
+S9:MAX_FREQ=434790
+
+S10:NUM_CHANNELS=10
+
+S11:DUTY_CYCLE=100
+
+S12:LBT_RSSI=0
+
+S13:MANCHESTER=0
+
+S14:RTSCTS=0
+
+S15:MAX_WINDOW=131
+
+ (:0) [1]
+2015-06-14 12:43:21,328  INFO MissionPlanner._3DRradio - Doing Command ATO (:0) [1]
+2015-06-14 12:43:21,339  INFO MissionPlanner._3DRradio - cmd ATO echo ATO
+ (:0) [1]
+2015-06-14 12:43:23,179  INFO MissionPlanner._3DRradio - response 0 ??>        §ê?             ?i?å!A         òΩ??N        ?>∂??$-µ????         ?¶??#A                   ¥???A ?Ω\??=??É>@©??????:c®?êJ        =
+
+???ı<   g???£è©:?f:?ºS?        `z:†æ?;Dt???   ç??        A ?R??∑Ω    :   ˆ?????  ÂS?É ?[??tC             S ??◊T??C ∞zD\?jΩ(qy??/¸` /ú` /¸` ?   ??            ?≈æ?òò  P#?L??*  qÉ?ö                òΩ??'??     ‰??>        ?1?             É+?ú!C         òΩ??D        ????$PΩ????         D???#C                   ??üC ÂL?Ω˜??=:=?> †???ı?? Û8◊≠?†J        ?z???ı<   Ûv??£è©:?f:?ºS?        Q??9w1<#g?¢?    ??£        C §ú?	§     Q†Å??y?ƒ    :   ?????? ?R?? b??¶tE             S ı?÷ö+
+?ßE zD???Ω(???ç/¸` /ú` /¸` £   ??            ?ü??©ò  P#◊	??*  U??´>        ¢?             ?à?¨!E         òΩ??D        Ø!t?≠$ª?ƒ????         !å?Æ#E                   Pê?ùE 		?Ω"Ø?=É'?>ê??? ???†?:c?∞J        ?z???ı<   C1?±£è©:?f:?ºS?        =π?8 I:?V?≤?   X??≥        E ???¥???    :   ??      ÂR?? ƒ ?µt'G             S ??÷???∂'G zD??TΩ*Ω?∑/¸` /ú` /¸` ú   ??            ?∂T?èò  P#æª?π*  ????                òΩ??'??      K?ª>        
+
+ (:0) [1]
+2015-06-14 12:43:51,422  INFO MissionPlanner._3DRradio - Connect btr 873 baud 57600 (:0) [1]
+2015-06-14 12:43:51,422  INFO MissionPlanner._3DRradio - Connect first response ?	     Q??? 20 (:0) [1]
+2015-06-14 12:43:51,526  INFO MissionPlanner._3DRradio - Doing Command AT&T (:0) [1]
+2015-06-14 12:43:51,537  INFO MissionPlanner._3DRradio - cmd AT&T echo AT&T
+ (:0) [1]
+2015-06-14 12:43:52,588  INFO MissionPlanner._3DRradio - response 0 
+ (:0) [1]
+2015-06-14 12:43:52,693  INFO MissionPlanner._3DRradio - Doing Command ATI (:0) [1]
+2015-06-14 12:43:52,705  INFO MissionPlanner._3DRradio - cmd ATI echo ATI
+ (:0) [1]
+2015-06-14 12:43:53,809  INFO MissionPlanner._3DRradio - response 0 SiK 1.9 on HM-TRP
+
+
+ (:0) [1]
+2015-06-14 12:43:53,809  INFO MissionPlanner._3DRradio - Connect Version: SiK 1.9 on HM-TRP
+ (:0) [1]
+2015-06-14 12:43:53,924  INFO MissionPlanner._3DRradio - Doing Command AT&T (:0) [1]
+2015-06-14 12:43:53,936  INFO MissionPlanner._3DRradio - cmd AT&T echo AT&T
+ (:0) [1]
+2015-06-14 12:43:54,987  INFO MissionPlanner._3DRradio - response 0 
+ (:0) [1]
+2015-06-14 12:43:55,091  INFO MissionPlanner._3DRradio - Doing Command RTI5 (:0) [1]
+2015-06-14 12:43:55,103  INFO MissionPlanner._3DRradio - cmd RTI5 echo RTI5
+ (:0) [1]
+2015-06-14 12:43:56,088  INFO MissionPlanner._3DRradio - response 0 S0:FORMAT=25
+
+S1:SERIAL_SPEED=57
+
+S2:AIR_SPEED=64
+
+S3:NETID=25
+
+S4:TXPOWER=11
+
+S5:ECC=1
+
+S6:MAVLINK=1
+
+S7:OPPRESEND=1
+
+S8:MIN_FREQ=433050
+
+S9:MAX_FREQ=434790
+
+S10:NUM_CHANNELS=10
+
+S11:DUTY_CYCLE=100
+
+S12:LBT_RSSI=0
+
+S13:MANCHESTER=0
+
+S14:RTSCTS=0
+
+S15:MAX_WINDOW=131
+
+ (:0) [1]
+2015-06-14 12:43:56,194  INFO MissionPlanner._3DRradio - Doing Command RTS1=115 (:0) [1]
+2015-06-14 12:43:56,206  INFO MissionPlanner._3DRradio - cmd RTS1=115 echo RTS1=115
+ (:0) [1]
+2015-06-14 12:43:56,448  INFO MissionPlanner._3DRradio - response 0 
+
+OK
+
+ (:0) [1]
+2015-06-14 12:43:56,562  INFO MissionPlanner._3DRradio - Doing Command RTS4=20 (:0) [1]
+2015-06-14 12:43:56,575  INFO MissionPlanner._3DRradio - cmd RTS4=20 echo RTS4=20
+ (:0) [1]
+2015-06-14 12:43:57,728  INFO MissionPlanner._3DRradio - response 0 
+
+OK
+
+
+ (:0) [1]
+2015-06-14 12:43:57,841  INFO MissionPlanner._3DRradio - Doing Command RT&W (:0) [1]
+2015-06-14 12:43:57,853  INFO MissionPlanner._3DRradio - cmd RT&W echo RT&W
+ (:0) [1]
+2015-06-14 12:43:58,159  INFO MissionPlanner._3DRradio - response 0 OK
+
+ (:0) [1]
+2015-06-14 12:43:58,273  INFO MissionPlanner._3DRradio - Doing Command RTZ (:0) [1]
+2015-06-14 12:43:58,285  INFO MissionPlanner._3DRradio - cmd RTZ echo RTZ
+ (:0) [1]
+2015-06-14 12:43:59,336  INFO MissionPlanner._3DRradio - response 0 
+ (:0) [1]
+2015-06-14 12:43:59,552  INFO MissionPlanner._3DRradio - Doing Command ATI5 (:0) [1]
+2015-06-14 12:43:59,612  INFO MissionPlanner._3DRradio - cmd ATI5 echo ATI5
+ (:0) [1]
+2015-06-14 12:44:00,449  INFO MissionPlanner._3DRradio - response 0 S0:FORMAT=25
+
+S1:SERIAL_SPEED=57
+
+S2:AIR_SPEED=64
+
+S3:NETID=25
+
+S4:TXPOWER=11
+
+S5:ECC=1
+
+S6:MAVLINK=1
+
+S7:OPPRESEND=1
+
+S8:MIN_FREQ=433050
+
+S9:MAX_FREQ=434790
+
+S10:NUM_CHANNELS=10
+
+S11:DUTY_CYCLE=100
+
+S12:LBT_RSSI=0
+
+S13:MANCHESTER=0
+
+S14:RTSCTS=0
+
+S15:MAX_WINDOW=131
+
+ (:0) [1]
+2015-06-14 12:44:00,559  INFO MissionPlanner._3DRradio - Doing Command ATS1=115 (:0) [1]
+2015-06-14 12:44:00,572  INFO MissionPlanner._3DRradio - cmd ATS1=115 echo ATS1=115
+ (:0) [1]
+2015-06-14 12:44:01,675  INFO MissionPlanner._3DRradio - response 0 OK
+
+
+ (:0) [1]
+2015-06-14 12:44:01,791  INFO MissionPlanner._3DRradio - Doing Command ATS4=20 (:0) [1]
+2015-06-14 12:44:01,803  INFO MissionPlanner._3DRradio - cmd ATS4=20 echo ATS4=20
+ (:0) [1]
+2015-06-14 12:44:02,957  INFO MissionPlanner._3DRradio - response 0 OK
+
+
+
+
+ (:0) [1]
+2015-06-14 12:44:03,070  INFO MissionPlanner._3DRradio - Doing Command AT&W (:0) [1]
+2015-06-14 12:44:03,113  INFO MissionPlanner._3DRradio - cmd AT&W echo AT&W
+ (:0) [1]
+2015-06-14 12:44:04,216  INFO MissionPlanner._3DRradio - response 0 OK
+
+
+ (:0) [1]
+2015-06-14 12:44:04,333  INFO MissionPlanner._3DRradio - Doing Command ATZ (:0) [1]
+2015-06-14 12:44:05,333  INFO MissionPlanner._3DRradio - cmd ATZ echo ATZ (:0) [1]
+2015-06-14 12:44:07,137  INFO MissionPlanner._3DRradio - response 0 ? ?ù*??/?
+
+ƒ%bjb?  B ??úH?©?      ß?å!?ùOà?m?…ˆO??¢/I?ßj@‰?f?.I
+
+   
+ (:0) [1]
+2015-06-14 12:44:36,695 DEBUG MissionPlanner.Utilities.ThemeManager - Theme set to None (:0) [1]
+2015-06-14 12:46:03,913 DEBUG MissionPlanner.Utilities.ThemeManager - Theme set to None (:0) [1]
+2015-06-14 12:46:12,122  INFO MissionPlanner._3DRradio - Connect btr 4 baud 115200 (:0) [1]
+2015-06-14 12:46:12,122  INFO MissionPlanner._3DRradio - Connect first response OK
+ 4 (:0) [1]
+2015-06-14 12:46:12,247  INFO MissionPlanner._3DRradio - Doing Command AT&T (:0) [1]
+2015-06-14 12:46:12,247  INFO MissionPlanner._3DRradio - cmd AT&T echo AT&T
+ (:0) [1]
+2015-06-14 12:46:13,325  INFO MissionPlanner._3DRradio - response 0 
+ (:0) [1]
+2015-06-14 12:46:13,427  INFO MissionPlanner._3DRradio - Doing Command ATI (:0) [1]
+2015-06-14 12:46:13,439  INFO MissionPlanner._3DRradio - cmd ATI echo ATI
+ (:0) [1]
+2015-06-14 12:46:14,555  INFO MissionPlanner._3DRradio - response 0 SiK 1.9 on HM-TRP
+
+
+ (:0) [1]
+2015-06-14 12:46:14,555  INFO MissionPlanner._3DRradio - Connect Version: SiK 1.9 on HM-TRP
+ (:0) [1]
+2015-06-14 12:46:14,665  INFO MissionPlanner._3DRradio - Doing Command AT&T (:0) [1]
+2015-06-14 12:46:14,665  INFO MissionPlanner._3DRradio - cmd AT&T echo AT&T
+ (:0) [1]
+2015-06-14 12:46:15,743  INFO MissionPlanner._3DRradio - response 0 
+ (:0) [1]
+2015-06-14 12:46:15,852  INFO MissionPlanner._3DRradio - Doing Command ATI (:0) [1]
+2015-06-14 12:46:15,852  INFO MissionPlanner._3DRradio - cmd ATI echo ATI
+ (:0) [1]
+2015-06-14 12:46:16,993  INFO MissionPlanner._3DRradio - response 0 SiK 1.9 on HM-TRP
+
+
+ (:0) [1]
+2015-06-14 12:46:17,118  INFO MissionPlanner._3DRradio - Doing Command RTI (:0) [1]
+2015-06-14 12:46:17,118  INFO MissionPlanner._3DRradio - cmd RTI echo RTI
+ (:0) [1]
+2015-06-14 12:46:18,305  INFO MissionPlanner._3DRradio - response 0 SiK 1.9 on HM-TRP
+
+
+ (:0) [1]
+2015-06-14 12:46:18,430  INFO MissionPlanner._3DRradio - Doing Command ATI3 (:0) [1]
+2015-06-14 12:46:18,430  INFO MissionPlanner._3DRradio - cmd ATI3 echo ATI3
+ (:0) [1]
+2015-06-14 12:46:19,555  INFO MissionPlanner._3DRradio - response 0 67
+
+
+ (:0) [1]
+2015-06-14 12:46:19,665  INFO MissionPlanner._3DRradio - Doing Command ATI2 (:0) [1]
+2015-06-14 12:46:19,680  INFO MissionPlanner._3DRradio - cmd ATI2 echo ATI2
+ (:0) [1]
+2015-06-14 12:46:20,805  INFO MissionPlanner._3DRradio - response 0 78
+
+
+ (:0) [1]
+2015-06-14 12:46:20,915  INFO MissionPlanner._3DRradio - Doing Command RTI2 (:0) [1]
+2015-06-14 12:46:20,915  INFO MissionPlanner._3DRradio - cmd RTI2 echo RTI2
+ (:0) [1]
+2015-06-14 12:46:21,133  INFO MissionPlanner._3DRradio - response 0 78
+
+ (:0) [1]
+2015-06-14 12:46:21,336  INFO MissionPlanner._3DRradio - Doing Command ATI7 (:0) [1]
+2015-06-14 12:46:21,336  INFO MissionPlanner._3DRradio - cmd ATI7 echo ATI7
+ (:0) [1]
+2015-06-14 12:46:22,471  INFO MissionPlanner._3DRradio - response 0 L/R RSSI: 206/206  L/R noise: 72/43 pkts: 208  txe=0 rxe=0 stx=0 srx=0 ecc=0/0 temp=-276 dco=0
+
+
+ (:0) [1]
+2015-06-14 12:46:22,580  INFO MissionPlanner._3DRradio - Doing Command ATI5 (:0) [1]
+2015-06-14 12:46:22,611  INFO MissionPlanner._3DRradio - cmd ATI5 echo ATI5
+ (:0) [1]
+2015-06-14 12:46:23,611  INFO MissionPlanner._3DRradio - response 0 S0:FORMAT=25
+
+S1:SERIAL_SPEED=115
+
+S2:AIR_SPEED=64
+
+S3:NETID=25
+
+S4:TXPOWER=20
+
+S5:ECC=1
+
+S6:MAVLINK=1
+
+S7:OPPRESEND=1
+
+S8:MIN_FREQ=433050
+
+S9:MAX_FREQ=434790
+
+S10:NUM_CHANNELS=10
+
+S11:DUTY_CYCLE=100
+
+S12:LBT_RSSI=0
+
+S13:MANCHESTER=0
+
+S14:RTSCTS=0
+
+S15:MAX_WINDOW=131
+
+ (:0) [1]
+2015-06-14 12:46:23,752  INFO MissionPlanner._3DRradio - Doing Command RTI5 (:0) [1]
+2015-06-14 12:46:23,768  INFO MissionPlanner._3DRradio - cmd RTI5 echo RTI5
+ (:0) [1]
+2015-06-14 12:46:25,852  INFO MissionPlanner._3DRradio - response 0 S0:FORMAT=25
+
+S1:SERIAL_SPEED=115
+
+S2:AIR_SPEED=64
+
+S3:NETID=25
+
+S4:TXPOWER=20
+
+S5:ECC=1
+
+S6:MAVLINK=1
+
+S7:OPPRESEND=1
+
+S8:MIN_FREQ=433050
+
+S9:MAX_FREQ=434790
+
+S10:NUM_CHANNELS=10
+
+S11:DUTY_CYCLE=100
+
+S12:LBT_RSSI=0
+
+S13:MANCHESTER=0
+
+S14:RTSCTS=0
+
+S15:MAX_WINDOW=131
+ (:0) [1]
+2015-06-14 12:46:25,992  INFO MissionPlanner._3DRradio - Doing Command ATO (:0) [1]
+2015-06-14 12:46:25,992  INFO MissionPlanner._3DRradio - cmd ATO echo ATO
+ (:0) [1]
+2015-06-14 12:46:27,055  INFO MissionPlanner._3DRradio - response 0 
+ (:0) [1]
